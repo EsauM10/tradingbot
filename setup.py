@@ -11,7 +11,6 @@ setup(
     url="https://github.com/EsauM10/tradingbot",
     author="Esaú Mascarenhas",
     author_email="esaumasc@gmail.com",
-    packages=["trading"],
     install_requires=["numpy"],
     classifiers=[
         "Intended Audience :: Financial and Insurance Industry",
