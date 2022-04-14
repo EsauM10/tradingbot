@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from trading import Action, Candle
 
 
-
 class TradingStrategy(ABC):
     def __init__(self, candles_amount:int) -> None:
         super().__init__()

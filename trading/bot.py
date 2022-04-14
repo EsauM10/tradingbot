@@ -1,7 +1,7 @@
 import time
 from trading import Action, StopLossReached, StopGainReached, Transaction, TransactionWasNotPerformed    
 from trading.exchanges import Exchange
-from trading.strategy import TradingStrategy
+from trading.strategies import TradingStrategy
 from trading.setup import TradingSetup
     
 class TradingBot:
@@ -60,7 +60,7 @@ class TradingBot:
 
             except TransactionWasNotPerformed as ex: 
                 print(ex)
-            except (StopGainReached, StopLossReached) as ex:
+            except (StopGainReached, StopLossReached):
                 self.stop()
                 
             time.sleep(self.time_interval)

@@ -5,3 +5,4 @@ examples
 iqoptionapi
 talib
 .env
+main.py
