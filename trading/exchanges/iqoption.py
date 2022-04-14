@@ -59,8 +59,8 @@ class IQOptionExchange(Exchange):
         if(not status): 
             raise TransactionWasNotPerformed('** Ativo/Timeframe nao disponivel\n')
         
-        print(f'** [{asset}]: Operação iniciada -> {direction.upper()}')
+        print(f'** [{asset}]: Operacao iniciada   -> {direction.upper()}')
         result, profit = self.api.check_win_v4(id)
         transaction = Transaction(result, round(profit, 2))
-        print(f'** [{asset}]: Operação finalizada -> {transaction}\n')
+        print(f'** [{asset}]: Operacao finalizada -> {transaction}\n')
         return transaction
