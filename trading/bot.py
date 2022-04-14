@@ -1,7 +1,7 @@
 import time
-from exchanges import Exchange
-from strategies import TradingStrategy
 from trading import Action, StopLossReached, StopGainReached, Transaction, TransactionWasNotPerformed    
+from trading.exchanges import Exchange
+from trading.strategy import TradingStrategy
 from trading.setup import TradingSetup
     
 class TradingBot:
