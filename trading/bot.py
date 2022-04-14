@@ -9,6 +9,7 @@ class TradingBot:
         self.exchange = exchange
         self.setup    = setup
         self.strategy = strategy
+        self.time_interval = 0.5
         self._running  = False
         self._profit   = 0.0
 
@@ -61,6 +62,8 @@ class TradingBot:
                 print(ex)
             except StopGainReached or StopLossReached:
                 self.stop()
+                
+            time.sleep(self.time_interval)
 
     
     def stop(self):
