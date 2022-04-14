@@ -1,7 +1,7 @@
 from datetime import datetime
-from exchanges import Exchange
-from iqoptionapi.stable_api import IQ_Option
 from trading import Candle, Transaction, TransactionWasNotPerformed
+from trading.exchanges import Exchange
+from iqoptionapi.stable_api import IQ_Option
 
 class IQOptionExchange(Exchange):
     def __init__(self, email: str, password: str) -> None:
