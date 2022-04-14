@@ -11,18 +11,29 @@ class IQOptionExchange(Exchange):
         ''' Obtem o saldo da conta atual '''
         return self.api.get_balance()
 
+
+    def change_balance(self, mode:str):
+        '''
+        Alterna entre a conta de treinamento e a conta real
+        :param mode: 'REAL', 'PRACTICE'
+        '''
+        self.api.change_balance(mode)
+
+
     def connect(self):
+        '''Estabelece conexao com a api da corretora'''
         (status, reason) = self.api.connect()
         if(not status): raise Exception(f'{reason}')
 
-    def buy(self, asset: str, expiration: int, amount: float):
+
+    def buy(self, asset: str, expiration: int, amount: float) -> Transaction:
         return self._perform_operation(asset, expiration, amount, 'call')
     
-    def sell(self, asset: str, expiration: int, amount: float):
+    def sell(self, asset: str, expiration: int, amount: float) -> Transaction:
         return self._perform_operation(asset, expiration, amount, 'put')
 
     
-    def get_candles(self, asset:str, timeframe:int, candles_amount:int, timestamp:float)->list[Candle]:
+    def get_candles(self, asset:str, timeframe:int, candles_amount:int, timestamp:float) -> list[Candle]:
         if(candles_amount <= 0): return []
         if(candles_amount > 1000): 
             raise Exception('O numero maximo de candles permitidos e 1000')
@@ -31,7 +42,7 @@ class IQOptionExchange(Exchange):
         return [self._format_candle(candle) for candle in data]
 
     
-    def _format_candle(self, candle: dict)->Candle:
+    def _format_candle(self, candle: dict) -> Candle:
         return Candle(
             open   = candle['open'],
             close  = candle['close'],
