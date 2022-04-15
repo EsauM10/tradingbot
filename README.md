@@ -9,7 +9,9 @@ OBS: As estratégias implementadas aqui são apenas para propósitos de estudo, 
  - [iqoptionapi](https://github.com/iqoptionapi/iqoptionapi)
 
 ## Instalar
-`pip install git+https://github.com/EsauM10/tradingbot.git`
+```bash
+pip install git+https://github.com/EsauM10/tradingbot.git
+```
 
 ## Como Iniciar
 OBS: O bot é programado para parar toda vez que os valores de stopgain/stoploss são atingidos
@@ -95,7 +97,7 @@ print(f'** Lucro obtido: R$ {bot.profit}')
 Para criar uma nova estratégia, crie uma classe que herda da classe TradingStrategy e implemente o método evaluate().
 
 A estratégia implementada abaixo utiliza a biblioteca [TA-Lib](https://github.com/mrjbq7/ta-lib), mas é possível 
-utilizar qualquer biblioteca de análise técnica.
+utilizar qualquer biblioteca de análise técnica como [FinTA](https://github.com/peerchemist/finta).
 ```Python
 from talib import stream
 from trading import Action, Candle
