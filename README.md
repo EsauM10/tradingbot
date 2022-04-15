@@ -92,3 +92,47 @@ print(f'** Lucro obtido: R$ {bot.profit}')
 ```
 
 ## Criando sua própria estratégia
+Para criar uma nova estratégia, crie uma classe que herda da classe TradingStrategy e implemente o método evaluate().
+
+A estratégia implementada abaixo utiliza a biblioteca [TA-Lib](https://github.com/mrjbq7/ta-lib), mas é possível 
+utilizar qualquer biblioteca de análise técnica.
+```Python
+from talib import stream
+from trading import Action, Candle
+from trading.strategies import TradingStrategy
+
+class BollingerBandsStrategy(TradingStrategy):
+    def __init__(self) -> None:
+        super().__init__(candles_amount=100) #Quantidade de candles da sua estrategia
+
+    def evaluate(self, candles: list[Candle]) -> Action:
+        close_prices      = self.filter_data_by(candles, key='close')
+        ma_100            = stream.EMA(close_prices, timeperiod=100)
+        upper, mid, lower = stream.BBANDS(close_prices, timeperiod=20, nbdevup=2.5, nbdevdn=2.5, matype=0)
+        price             = close_prices[-1]
+        percent           = (price-lower)/(upper-lower)
+        
+        print(
+            f'BBANDS:\t{round(percent, 3)}\n'+
+            f'Upper:\t{round(upper, 5)}\n'+
+            f'Lower:\t{round(lower, 5)}\n'+
+            f'EMA100:\t{round(ma_100, 5)}\n',
+        )
+
+        if(percent > 1.00 and ma_100 > upper): return Action.SELL
+        if(percent < 0.00 and ma_100 < lower): return Action.BUY
+        return Action.HOLD
+```
+Depois de criar a sua estratégia, é só usar da forma convencional
+```Python
+...
+
+setup    = TradingSetup(asset='EURUSD', timeframe=1, money_amount=1.0, stoploss=2.0, stopgain=2.0)
+strategy = BollingerBandsStrategy()
+exchange = IQOptionExchange(email, password)
+bot      = TradingBot(exchange, setup, strategy)
+
+exchange.connect()
+bot.run()
+print(f'** Lucro obtido: R$ {bot.profit}')
+```
