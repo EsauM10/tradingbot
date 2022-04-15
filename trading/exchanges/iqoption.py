@@ -1,5 +1,6 @@
 from datetime import datetime
-from trading import Candle, Transaction, TransactionWasNotPerformed
+from trading import Candle, Transaction
+from trading.exceptions import TransactionCanceled
 from trading.exchanges import Exchange
 from iqoptionapi.stable_api import IQ_Option
 
@@ -57,7 +58,7 @@ class IQOptionExchange(Exchange):
         status, id = self.api.buy(amount, asset, direction, expiration)
 
         if(not status): 
-            raise TransactionWasNotPerformed('** Ativo/Timeframe nao disponivel\n')
+            raise TransactionCanceled('** Ativo/Timeframe nao disponivel\n')
         
         print(f'** [{asset}]: Operacao iniciada   -> {direction.upper()}')
         result, profit = self.api.check_win_v4(id)

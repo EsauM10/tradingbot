@@ -52,12 +52,3 @@ class Transaction:
     def __str__(self) -> str:
         return f'<result={self.result}, profit={self.profit}>'
 
-
-class StopLossReached(Exception):
-    pass
-
-class StopGainReached(Exception):
-    pass
-
-class TransactionWasNotPerformed(Exception):
-    pass

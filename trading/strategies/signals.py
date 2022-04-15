@@ -1,6 +1,7 @@
 import time, re
 from datetime import datetime
-from trading import Action, Candle, StopLossReached
+from trading import Action, Candle
+from trading.exceptions import StopTradingBot
 from trading.setup import TradingSetup
 from trading.strategies import TradingStrategy
 
@@ -45,7 +46,7 @@ class ListOfSignalsStrategy(TradingStrategy):
         return re.match(pattern=PATTERN, string=entry)
 
     def evaluate(self, candles: list[Candle]) -> Action:
-        if(not self.entries): raise StopLossReached()
+        if(not self.entries): raise StopTradingBot()
 
         entry = self.entries.pop()
         self.setup.asset     = entry.asset 
