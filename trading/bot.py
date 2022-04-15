@@ -1,6 +1,6 @@
 import time
 from trading import Action, Transaction
-from trading.exceptions import StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
+from trading.exceptions import HoldAction, StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
 from trading.exchanges import Exchange
 from trading.strategies import TradingStrategy
 from trading.setup import TradingSetup
@@ -24,7 +24,7 @@ class TradingBot:
         expiration = self.setup.timeframe
 
         if(action == Action.HOLD):
-            raise TransactionCanceled()
+            raise HoldAction()
         if(action == Action.BUY):
             return self.exchange.buy(asset, expiration, amount)
         if(action == Action.SELL):
@@ -58,7 +58,8 @@ class TradingBot:
                 transaction = self.perform_transaction(action=result)
                 self.__verify_if_should_stop(transaction)
 
-            except TransactionCanceled as ex:
+            except HoldAction: pass
+            except TransactionCanceled as ex: 
                 print(ex)
             except (StopGainReached, StopLossReached, StopTradingBot):
                 self.stop()

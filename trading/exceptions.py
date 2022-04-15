@@ -9,3 +9,6 @@ class StopTradingBot(Exception):
 
 class TransactionCanceled(Exception):
     pass
+
+class HoldAction(Exception):
+    pass

@@ -36,7 +36,7 @@ class ListOfSignalsStrategy(TradingStrategy):
         return [self.parse_entry(entry) for entry in entries if(self.matchs(entry))]
 
     def parse_entry(self, entry:str) -> Entry:
-        '''Transforma uma string no formato ex: 01/02;00:00;EURUSD;M1;PUT'''
+        '''Transforma uma string no formato ex: 01/02;00:00;EURUSD;M1;PUT em um objeto Entry'''
         data = entry.split(';')
         date, hour, asset, timeframe, action = data
         date_string = f'{date}/{datetime.now().year} {hour}'
