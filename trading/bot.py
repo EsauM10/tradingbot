@@ -18,13 +18,13 @@ class TradingBot:
     def profit(self):
         return self._profit
 
-    def perform_transaction(self, action: Action):
+    def perform_transaction(self, action: Action) -> Transaction:
         asset      = self.setup.asset
         amount     = self.setup.money_amount
         expiration = self.setup.timeframe
 
         if(action == Action.HOLD):
-            return None
+            raise TransactionCanceled()
         if(action == Action.BUY):
             return self.exchange.buy(asset, expiration, amount)
         if(action == Action.SELL):
@@ -37,8 +37,7 @@ class TradingBot:
     def stopgain_was_reached(self)->bool:
         return self.profit >= self.setup.stopgain
 
-    def __verify_profit(self, transaction: Transaction):
-        if(transaction is None): return
+    def __verify_if_should_stop(self, transaction: Transaction):
         self._profit += transaction.profit
 
         if(self.stoploss_was_reached()): 
@@ -57,7 +56,7 @@ class TradingBot:
                 prices      = self.exchange.get_candles(asset, timeframe, candles_amount, timestamp=time.time())
                 result      = self.strategy.evaluate(candles=prices)
                 transaction = self.perform_transaction(action=result)
-                self.__verify_profit(transaction)
+                self.__verify_if_should_stop(transaction)
 
             except TransactionCanceled as ex:
                 print(ex)

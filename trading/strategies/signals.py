@@ -1,7 +1,7 @@
 import time, re
 from datetime import datetime
 from trading import Action, Candle
-from trading.exceptions import StopTradingBot
+from trading.exceptions import StopTradingBot, TransactionCanceled
 from trading.setup import TradingSetup
 from trading.strategies import TradingStrategy
 
@@ -48,15 +48,14 @@ class ListOfSignalsStrategy(TradingStrategy):
     def evaluate(self, candles: list[Candle]) -> Action:
         if(not self.entries): raise StopTradingBot()
 
-        entry = self.entries.pop()
-        self.setup.asset     = entry.asset 
+        entry                = self.entries.pop()
+        action               = entry.action
+        sleep_time           = entry.target_hour.timestamp() - time.time()
+        self.setup.asset     = entry.asset
         self.setup.timeframe = entry.timeframe
-        action      = entry.action
-        sleep_time  = entry.target_hour.timestamp() - time.time() 
         
         if(sleep_time < 0): 
-            print(f'** [{entry.asset}]: Não foi possivel realizar a operacao')
-            return Action.HOLD
+            raise TransactionCanceled(f'** [{entry.asset}]: Não foi possivel realizar a operacao')
 
         print(f'** [{entry.asset}]: Operacao agendada para {entry.hour}')
         time.sleep(sleep_time)
