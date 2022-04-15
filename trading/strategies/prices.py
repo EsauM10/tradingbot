@@ -20,7 +20,7 @@ class PriceAlert:
         return f'Alert(price={self.price}, {self.action.name})'
     
 
-class PriceMonitor(TradingStrategy):
+class PriceMonitorStrategy(TradingStrategy):
     def __init__(self, alerts: list[PriceAlert]) -> None:
         super().__init__(candles_amount=1)
         self.alerts = alerts
