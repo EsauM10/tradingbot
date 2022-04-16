@@ -14,7 +14,6 @@ pip install git+https://github.com/EsauM10/tradingbot.git
 ```
 
 ## Como Iniciar
-OBS: O bot é programado para parar toda vez que os valores de stopgain/stoploss são atingidos
 ### Seu primeiro bot
 Essa é a estrutura mínima que seu bot deve ter para funcionar.
 
@@ -137,4 +136,20 @@ bot      = TradingBot(exchange, setup, strategy)
 exchange.connect()
 bot.run()
 print(f'** Lucro obtido: R$ {bot.profit}')
+```
+
+## Exceptions
+O bot é programado para parar toda vez que os valores de stopgain/stoploss são atingidos
+
+Use a exception StopTradingBot para forçar a parada da sua estratégia caso precise
+```Python
+from trading.exceptions import StopTradingBot
+...
+
+def evaluate(self, candles: list[Candle]) -> Action:
+    ...
+    
+    if(should_stop): raise StopTradingBot()
+    ...
+    return Action.HOLD
 ```
