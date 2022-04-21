@@ -48,6 +48,7 @@ class Transaction:
     def __init__(self, result:str, profit:float) -> None:
         self.result = result
         self.profit = profit
+        self.action = None
     
     def __str__(self) -> str:
         return f'<result={self.result}, profit={self.profit}>'

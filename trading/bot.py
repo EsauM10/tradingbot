@@ -11,8 +11,8 @@ class TradingBot:
         self.setup    = setup
         self.strategy = strategy
         self.time_interval = 0.5
-        self._running  = False
-        self._profit   = 0.0
+        self._running      = False
+        self._profit       = 0.0
 
     @property
     def profit(self):
@@ -30,21 +30,22 @@ class TradingBot:
         if(action == Action.SELL):
             return self.exchange.sell(asset, expiration, amount)
 
-
-    def stoploss_was_reached(self)->bool:
-        return self.profit <= -self.setup.stoploss
-    
-    def stopgain_was_reached(self)->bool:
-        return self.profit >= self.setup.stopgain
-
-    def __verify_if_should_stop(self, transaction: Transaction):
+    def update_profit(self, transaction: Transaction):
         self._profit += transaction.profit
 
+    def stoploss_was_reached(self) -> bool:
+        return self.profit <= -self.setup.stoploss
+    
+    def stopgain_was_reached(self) -> bool:
+        return self.profit >= self.setup.stopgain
+
+    def verify_if_should_stop(self):
         if(self.stoploss_was_reached()): 
             raise StopLossReached('** Stop Loss atingido')
         if(self.stopgain_was_reached()):
             raise StopGainReached('** Stop Win atingido')
     
+
     def run(self):
         asset          = self.setup.asset
         timeframe      = self.setup.timeframe
@@ -53,10 +54,12 @@ class TradingBot:
 
         while self._running:
             try:  
-                prices      = self.exchange.get_candles(asset, timeframe, candles_amount, timestamp=time.time())
-                result      = self.strategy.evaluate(candles=prices)
+                candles     = self.exchange.get_candles(asset, timeframe, candles_amount, timestamp=time.time())
+                result      = self.strategy.evaluate(candles=candles)
                 transaction = self.perform_transaction(action=result)
-                self.__verify_if_should_stop(transaction)
+                
+                self.update_profit(transaction)
+                self.verify_if_should_stop()
 
             except HoldAction: pass
             except TransactionCanceled as ex: 
