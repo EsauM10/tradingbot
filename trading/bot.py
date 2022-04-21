@@ -1,11 +1,11 @@
 import time
-from trading import Action, Transaction
+from trading import Action, Transaction, TradingBotBase
 from trading.exceptions import HoldAction, StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
 from trading.exchanges import Exchange
 from trading.strategies import TradingStrategy
 from trading.setup import TradingSetup
     
-class TradingBot:
+class TradingBot(TradingBotBase):
     def __init__(self, exchange: Exchange, setup: TradingSetup, strategy: TradingStrategy):
         self.exchange = exchange
         self.setup    = setup

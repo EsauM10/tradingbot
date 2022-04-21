@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum, auto
 
@@ -53,3 +54,21 @@ class Transaction:
     def __str__(self) -> str:
         return f'<result={self.result}, profit={self.profit}>'
 
+
+class TradingBotBase(ABC):
+    
+    @abstractmethod
+    def perform_transaction(self, action: Action) -> Transaction:
+        pass
+    
+    @abstractmethod
+    def run(self):
+        pass
+    
+    @abstractmethod
+    def update_profit(self, transaction: Transaction):
+        pass
+
+    @abstractmethod
+    def verify_if_should_stop(self):
+        pass
