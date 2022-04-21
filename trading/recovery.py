@@ -1,4 +1,5 @@
-from trading import Transaction, TradingBotBase
+from trading import TradingBotBase
+from trading.util import Transaction
 
 
 class Martingale:

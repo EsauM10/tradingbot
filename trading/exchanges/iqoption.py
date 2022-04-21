@@ -1,5 +1,5 @@
 from datetime import datetime
-from trading import Action, Candle, Transaction
+from trading.util import Action, Candle, Transaction
 from trading.exceptions import TransactionCanceled
 from trading.exchanges import Exchange
 from iqoptionapi.stable_api import IQ_Option

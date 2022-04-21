@@ -69,7 +69,7 @@ print(f'** Lucro obtido: R$ {bot.profit}')
 
 ### Alerta de preços
 ```Python
-from trading import Action
+from trading.util import Action
 from trading.bot import TradingBot
 from trading.setup import TradingSetup
 from trading.strategies.prices import PriceAlert, PriceMonitorStrategy
@@ -99,7 +99,7 @@ A estratégia implementada abaixo utiliza a biblioteca [TA-Lib](https://github.c
 utilizar qualquer biblioteca de análise técnica como [FinTA](https://github.com/peerchemist/finta).
 ```Python
 from talib import stream
-from trading import Action, Candle
+from trading.util import Action, Candle
 from trading.strategies import TradingStrategy
 
 class BollingerBandsStrategy(TradingStrategy):

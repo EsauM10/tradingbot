@@ -1,5 +1,5 @@
 from random import randint
-from trading import Action, Candle
+from trading.util import Action, Candle
 from trading.strategies import TradingStrategy
 
 class RandomStrategy(TradingStrategy):

@@ -1,6 +1,6 @@
 import time, re
 from datetime import datetime
-from trading import Action, Candle
+from trading.util import Action, Candle
 from trading.exceptions import StopTradingBot, TransactionCanceled
 from trading.setup import TradingSetup
 from trading.strategies import TradingStrategy

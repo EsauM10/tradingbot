@@ -1,6 +1,6 @@
 import numpy as np
 from abc import ABC, abstractmethod
-from trading import Action, Candle
+from trading.util import Action, Candle
 
 
 class TradingStrategy(ABC):

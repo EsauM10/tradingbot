@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from trading import Candle, Transaction
+from trading.util import Candle, Transaction
 
 
 class Exchange(ABC):

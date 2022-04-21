@@ -1,5 +1,6 @@
 import time
-from trading import Action, Transaction, TradingBotBase
+from trading import TradingBotBase
+from trading.util import Action, Transaction
 from trading.exceptions import HoldAction, StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
 from trading.exchanges import Exchange
 from trading.recovery import Martingale

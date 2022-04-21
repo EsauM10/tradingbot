@@ -1,5 +1,5 @@
 from typing import Callable
-from trading import Action, Candle
+from trading.util import Action, Candle
 from trading.exceptions import StopTradingBot
 from trading.strategies import TradingStrategy
 
