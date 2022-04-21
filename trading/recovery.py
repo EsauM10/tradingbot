@@ -5,18 +5,20 @@ class Martingale:
     def __init__(self, trading_bot: TradingBotBase) -> None:        
         self.bot   = trading_bot
         self.setup = self.bot.setup
-        self.__initial_entry_value = self.setup.money_amount
 
+    def update_entry_value(self, value: float):
+        self.setup.money_amount = value
 
-    def __update_entry_value(self):
-        self.setup.money_amount += self.setup.money_amount * self.setup.factor
-
-    def __reset_entry_value(self):
-        self.setup.money_amount = self.__initial_entry_value
+    def get_next_entry(self) -> float:
+        money_amount = self.setup.money_amount
+        factor       = self.setup.factor
+        return money_amount + money_amount * factor
 
     def run(self, transaction: Transaction):
+        initial_amount = self.setup.money_amount
+        
         for level in range(self.setup.martingales):
-            self.__update_entry_value()
+            self.update_entry_value(self.get_next_entry())
 
             print(f'** [{self.setup.asset}]: Martingale {level+1}')
             transaction = self.bot.perform_transaction(transaction.action)
@@ -25,4 +27,5 @@ class Martingale:
 
             if(transaction.profit > 0): break
         
-        self.__reset_entry_value()
+        self.update_entry_value(initial_amount)
+        
