@@ -2,21 +2,29 @@ import time
 from trading import Action, Transaction, TradingBotBase
 from trading.exceptions import HoldAction, StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
 from trading.exchanges import Exchange
+from trading.recovery import Martingale
 from trading.strategies import TradingStrategy
 from trading.setup import TradingSetup
     
 class TradingBot(TradingBotBase):
     def __init__(self, exchange: Exchange, setup: TradingSetup, strategy: TradingStrategy):
-        self.exchange = exchange
-        self.setup    = setup
-        self.strategy = strategy
+        self.exchange      = exchange
+        self.setup         = setup
+        self.strategy      = strategy
         self.time_interval = 0.5
         self._running      = False
         self._profit       = 0.0
 
+        self.martingale    = Martingale(trading_bot=self)
+
     @property
     def profit(self):
         return self._profit
+
+
+    def do_martingale(self, transaction: Transaction):
+        if(transaction.profit >= 0 or self.setup.martingales <= 0): return
+        self.martingale.run(transaction)
 
     def perform_transaction(self, action: Action) -> Transaction:
         asset      = self.setup.asset
@@ -59,6 +67,7 @@ class TradingBot(TradingBotBase):
                 transaction = self.perform_transaction(action=result)
                 
                 self.update_profit(transaction)
+                self.do_martingale(transaction)
                 self.verify_if_should_stop()
 
             except HoldAction: pass
