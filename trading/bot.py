@@ -3,7 +3,7 @@ from trading import TradingBotBase
 from trading.util import Action, Transaction
 from trading.exceptions import HoldAction, StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
 from trading.exchanges import Exchange
-from trading.recovery import Martingale
+from trading.recovery import Martingale, Soros
 from trading.strategies import TradingStrategy
 from trading.setup import TradingSetup
     
@@ -17,6 +17,7 @@ class TradingBot(TradingBotBase):
         self._profit       = 0.0
 
         self.martingale    = Martingale(trading_bot=self)
+        self.soros         = Soros(trading_bot=self)
 
     @property
     def profit(self):
@@ -26,6 +27,10 @@ class TradingBot(TradingBotBase):
     def do_martingale(self, transaction: Transaction):
         if(transaction.profit >= 0 or self.setup.martingales <= 0): return
         self.martingale.run(transaction)
+
+    def do_soros(self, transaction: Transaction):
+        if(transaction.profit <= 0 or self.setup.soros <= 0): return
+        self.soros.run(transaction)
 
     def perform_transaction(self, action: Action) -> Transaction:
         asset      = self.setup.asset
@@ -68,6 +73,7 @@ class TradingBot(TradingBotBase):
                 transaction = self.perform_transaction(action=result)
                 
                 self.update_profit(transaction)
+                self.do_soros(transaction)
                 self.do_martingale(transaction)
                 self.verify_if_should_stop()
 
