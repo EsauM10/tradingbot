@@ -1,13 +1,12 @@
 import time
-from trading import TradingBotBase
 from trading.util import Action, Transaction
 from trading.exceptions import HoldAction, StopLossReached, StopGainReached, TransactionCanceled, StopTradingBot
 from trading.exchanges import Exchange
-from trading.recovery import Martingale, Soros
+from trading.recovery import Martingale, RecoveryStrategy, Soros
 from trading.strategies import TradingStrategy
 from trading.setup import TradingSetup
     
-class TradingBot(TradingBotBase):
+class TradingBot:
     def __init__(self, exchange: Exchange, setup: TradingSetup, strategy: TradingStrategy):
         self.exchange      = exchange
         self.setup         = setup
@@ -16,21 +15,34 @@ class TradingBot(TradingBotBase):
         self._running      = False
         self._profit       = 0.0
 
-        self.martingale    = Martingale(trading_bot=self)
-        self.soros         = Soros(trading_bot=self)
-
     @property
     def profit(self):
         return self._profit
 
+    def repeat_transaction(self, transaction: Transaction, recovery: RecoveryStrategy):
+        initial_amount = self.setup.money_amount
+        
+        for level in range(recovery.count):
+            print(f'** [{self.setup.asset}]: {recovery} {level+1}')
+            money_amount = recovery.calculate(self.setup, transaction)
+            self.setup.set_money(money_amount)
+             
+            transaction = self.perform_transaction(transaction.action)
+            self.update_profit(transaction)
+            self.verify_if_should_stop()
+
+            if(recovery.should_stop(transaction)): break
+        self.setup.set_money(initial_amount)
+    
 
     def do_martingale(self, transaction: Transaction):
-        if(transaction.profit >= 0 or self.setup.martingales <= 0): return
-        self.martingale.run(transaction)
+        martingale = Martingale(count=self.setup.martingales)
+        self.repeat_transaction(transaction, recovery=martingale)
 
     def do_soros(self, transaction: Transaction):
-        if(transaction.profit <= 0 or self.setup.soros <= 0): return
-        self.soros.run(transaction)
+        soros = Soros(count=self.setup.soros)
+        self.repeat_transaction(transaction, recovery=soros)
+
 
     def perform_transaction(self, action: Action) -> Transaction:
         asset      = self.setup.asset
@@ -46,6 +58,12 @@ class TradingBot(TradingBotBase):
 
     def update_profit(self, transaction: Transaction):
         self._profit += transaction.profit
+    
+    def should_do_martingale(self, transaction: Transaction) -> bool:
+        return transaction.profit < 0 and self.setup.martingales > 0
+    
+    def should_do_soros(self, transaction: Transaction) -> bool:
+        return transaction.profit > 0 and self.setup.soros > 0
 
     def stoploss_was_reached(self) -> bool:
         return self.profit <= -self.setup.stoploss
@@ -73,10 +91,14 @@ class TradingBot(TradingBotBase):
                 transaction = self.perform_transaction(action=result)
                 
                 self.update_profit(transaction)
-                self.do_soros(transaction)
-                self.do_martingale(transaction)
                 self.verify_if_should_stop()
 
+                if(self.should_do_soros(transaction)):
+                    self.do_soros(transaction)
+                elif(self.should_do_martingale(transaction)):
+                    self.do_martingale(transaction)
+                
+                
             except HoldAction: pass
             except TransactionCanceled as ex: 
                 print(ex)

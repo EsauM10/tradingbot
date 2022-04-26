@@ -1,56 +1,46 @@
-from trading import TradingBotBase
+from abc import ABC, abstractmethod
+from trading.setup import TradingSetup
 from trading.util import Transaction
 
 
-class Martingale:
-    def __init__(self, trading_bot: TradingBotBase) -> None:        
-        self.bot   = trading_bot
-        self.setup = self.bot.setup
+class RecoveryStrategy(ABC):
+    def __init__(self, count: int) -> None:
+        self.count = count
+    
+    @abstractmethod
+    def calculate(self, setup: TradingSetup, transaction: Transaction) -> float:
+        pass
+    
+    @abstractmethod
+    def should_stop(self, transaction: Transaction) -> bool:
+        pass
 
-    def update_entry_value(self, value: float):
-        self.setup.money_amount = value
 
-    def get_next_entry(self) -> float:
-        money_amount = self.setup.money_amount
-        factor       = self.setup.factor
+class Martingale(RecoveryStrategy):
+    def __init__(self, count: int) -> None:
+        super().__init__(count)
+
+    def calculate(self, setup: TradingSetup, transaction: Transaction) -> float:
+        money_amount = setup.money_amount
+        factor       = setup.factor
         return money_amount + money_amount * factor
 
-    def run(self, transaction: Transaction):
-        initial_amount = self.setup.money_amount
-        
-        for level in range(self.setup.martingales):
-            print(f'** [{self.setup.asset}]: Martingale {level+1}')
-            self.update_entry_value(self.get_next_entry())
-            
-            transaction = self.bot.perform_transaction(transaction.action)
-            self.bot.update_profit(transaction)
-            self.bot.verify_if_should_stop()
+    def should_stop(self, transaction: Transaction) -> bool:
+        return transaction.profit > 0
 
-            if(transaction.profit > 0): break
-        
-        self.update_entry_value(initial_amount)
+    def __str__(self) -> str:
+        return 'Martingale'
 
 
+class Soros(RecoveryStrategy):
+    def __init__(self, count: int) -> None:
+        super().__init__(count)
 
-class Soros:
-    def __init__(self, trading_bot: TradingBotBase) -> None:        
-        self.bot   = trading_bot
-        self.setup = self.bot.setup
+    def calculate(self, setup: TradingSetup, transaction: Transaction):
+        return setup.money_amount + transaction.profit
     
-    def update_entry_value(self, value: float):
-        self.setup.money_amount = value
+    def should_stop(self, transaction: Transaction) -> bool:
+        return transaction.profit < 0
 
-    def run(self, transaction: Transaction):
-        initial_amount = self.setup.money_amount
-
-        for level in range(self.setup.soros):
-            print(f'** [{self.setup.asset}]: Soros {level+1}')
-            self.update_entry_value(self.setup.money_amount + transaction.profit)
-
-            transaction = self.bot.perform_transaction(transaction.action)
-            self.bot.update_profit(transaction)
-            self.bot.verify_if_should_stop()
-            
-            if(transaction.profit < 0): break
-
-        self.update_entry_value(initial_amount)
+    def __str__(self) -> str:
+        return 'Soros'

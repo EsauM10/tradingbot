@@ -4,9 +4,16 @@ class TradingSetup:
     ) -> None:
         self.asset          = asset
         self.timeframe      = timeframe
-        self.money_amount   = money_amount
+        self.__money_amount = money_amount
         self.stoploss       = stoploss
         self.stopgain       = stopgain
         self.martingales    = martingales
         self.factor         = factor
         self.soros          = soros
+    
+    @property
+    def money_amount(self):
+        return self.__money_amount
+
+    def set_money(self, money: float):
+        self.__money_amount = money
