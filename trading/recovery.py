@@ -23,7 +23,7 @@ class Martingale(RecoveryStrategy):
     def calculate(self, setup: TradingSetup, transaction: Transaction) -> float:
         money_amount = setup.money_amount
         factor       = setup.factor
-        return money_amount + money_amount * factor
+        return abs(money_amount + money_amount * factor)
 
     def should_stop(self, transaction: Transaction) -> bool:
         return transaction.profit > 0

@@ -1,8 +1,10 @@
 __pycache__/
+.pytest_cache
 
 venv
 examples
 iqoptionapi
 talib
+/tests
 .env
 main.py

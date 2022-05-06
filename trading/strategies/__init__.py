@@ -12,10 +12,18 @@ class TradingStrategy(ABC):
     def evaluate(self, candles: list[Candle])-> Action:
         pass
     
-    def filter_data_by(self, data: list[Candle], key:str):
+    @staticmethod
+    def filter_data_by(data: list[Candle], key:str):
         '''Filtra os dados de uma lista de Candle por uma key especifica''' 
-        return np.array([item.to_dict[key] for item in data if key in item.to_dict])
+        return np.array([
+            item.to_dict[key] 
+            for item in data if key in item.to_dict
+        ])
 
-    def get_dataset(self, candles: list[Candle], keys: list[str]):
+    @staticmethod
+    def get_dataset(candles: list[Candle], keys: list[str]):
         '''Retorna um dataset agrupado por uma lista de keys'''
-        return {key: self.filter_data_by(candles, key) for key in keys}
+        return {
+            key: TradingStrategy.filter_data_by(candles, key) 
+            for key in keys
+        }
