@@ -4,7 +4,7 @@ Bot IQ Option escalável onde é possível criar e testar diferentes estratégia
 OBS: As estratégias implementadas aqui são apenas para propósitos de estudo, use sua conta no modo treinamento
 
 ## Dependências
- - python (3.7+)
+ - python (3.9+)
  - numpy
  - [iqoptionapi](https://github.com/iqoptionapi/iqoptionapi)
 
