@@ -99,6 +99,7 @@ A estratégia implementada abaixo utiliza a biblioteca [TA-Lib](https://github.c
 utilizar qualquer biblioteca de análise técnica como [FinTA](https://github.com/peerchemist/finta).
 ```Python
 from talib import stream
+from trading.helpers import filter_data_by
 from trading.util import Action, Candle
 from trading.strategies import TradingStrategy
 
@@ -107,7 +108,7 @@ class BollingerBandsStrategy(TradingStrategy):
         super().__init__(candles_amount=100) #Quantidade de candles da sua estrategia
 
     def evaluate(self, candles: list[Candle]) -> Action:
-        close_prices      = TradingStrategy.filter_data_by(candles, key='close')
+        close_prices      = filter_data_by(candles, key='close')
         ma_100            = stream.EMA(close_prices, timeperiod=100)
         upper, mid, lower = stream.BBANDS(close_prices, timeperiod=20, nbdevup=2.5, nbdevdn=2.5, matype=0)
         price             = close_prices[-1]
