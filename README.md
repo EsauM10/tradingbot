@@ -1,3 +1,4 @@
+[![](https://img.shields.io/badge/python-3.9.6+-blue.svg)](https://www.python.org/downloads/release/python-396/)
 # TradingBot
 Bot IQ Option escalável onde é possível criar e testar diferentes estratégias de análise técnica e probabilística.
 
