@@ -1,4 +1,4 @@
-from random import randint
+import random
 from trading.util import Action, Candle
 from trading.strategies import TradingStrategy
 
@@ -7,6 +7,6 @@ class RandomStrategy(TradingStrategy):
         super().__init__(candles_amount=0)
     
     def evaluate(self, candles: list[Candle]) -> Action:
-        number = randint(0, 1)
+        number = random.randint(0, 1)
         if(number): return Action.BUY
         return Action.SELL

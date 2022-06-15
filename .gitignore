@@ -5,6 +5,5 @@ venv
 examples
 iqoptionapi
 talib
-/tests
 .env
 main.py
