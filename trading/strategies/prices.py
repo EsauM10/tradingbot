@@ -1,4 +1,3 @@
-from typing import Callable
 from trading.util import Action, Candle
 from trading.exceptions import StopTradingBot
 from trading.strategies import TradingStrategy
@@ -6,18 +5,14 @@ from trading.strategies import TradingStrategy
 
 class PriceAlert:
     def __init__(self, price: float, action: Action) -> None:
-        self.price  = price
+        self.target_price = price
         self.action = action
-        self.should_purchase = self.__get_purchase_condition()
     
-    def __get_purchase_condition(self) -> Callable[[float], bool]:
-        if(self.action == Action.BUY):
-            return lambda price: price <= self.price
-
-        return lambda price: price >= self.price
+    def should_purchase(self, price: float) -> bool:
+        return  0.999980 < (price / self.target_price) < 1.000020
 
     def __repr__(self) -> str:
-        return f'Alert(price={self.price}, {self.action.name})'
+        return f'Alert(price={self.target_price}, {self.action.name})'
     
 
 class PriceMonitorStrategy(TradingStrategy):
