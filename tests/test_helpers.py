@@ -53,7 +53,7 @@ def test_should_filter_data_by_volume():
 
 
 
-def test_should_raises_a_exception_when_invalid_price_key_is_passed():
+def test_should_raises_an_exception_when_invalid_price_key_is_passed():
     with pytest.raises(KeyError):
         helpers.get_max_price(candles, price_type='any')
         helpers.get_min_price(candles, price_type='any')

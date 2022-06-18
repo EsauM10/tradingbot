@@ -45,13 +45,13 @@ def test_should_parse_a_string_list():
     assert entries == reversed_entries
 
 
-def test_should_raises_a_exception_when_entries_is_empty():
+def test_should_raises_an_exception_when_entries_is_empty():
     strategy = ListOfSignalsStrategy([], setup=None)
     with pytest.raises(StopTradingBot):
         strategy.evaluate(candles=[])
 
 
-def test_should_raises_a_exception_when_the_entry_remaining_time_is_negative(monkeypatch: MonkeyPatch):
+def test_should_raises_an_exception_when_the_entry_remaining_time_is_negative(monkeypatch: MonkeyPatch):
     setup = TradingSetup(asset='', timeframe=0, money_amount=0, stoploss=0, stopgain=0)
     strategy = ListOfSignalsStrategy(['15/04;17:06;USDCHF;M1;PUT'], setup)
 

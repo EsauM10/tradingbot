@@ -12,7 +12,7 @@ class IQOptionExchange(Exchange):
         self.api = IQ_Option(email, password)
 
 
-    def balance(self)->float:
+    def balance(self) -> float:
         return self.api.get_balance()
 
     def change_account(self, mode: AccountModes):

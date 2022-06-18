@@ -15,7 +15,7 @@ candles = [
     )
 ]
 
-def test_should_raises_a_exception_when_alerts_is_empty():
+def test_should_raises_an_exception_when_alerts_is_empty():
     strategy = PriceMonitorStrategy(alerts=[])
     with pytest.raises(StopTradingBot):
         strategy.evaluate(candles=candles)
