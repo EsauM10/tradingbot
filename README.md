@@ -1,5 +1,5 @@
 [![](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-396/)
-![Tests](https://github.com/mrjbq7/ta-lib/actions/workflows/tests.yml/badge.svg)
+![Tests](https://github.com/EsauM10/tradingbot/actions/workflows/tests.yml/badge.svg)
 # TradingBot
 Bot IQ Option escalável onde é possível criar e testar diferentes estratégias de análise técnica e probabilística.
 
