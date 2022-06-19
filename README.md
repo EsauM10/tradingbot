@@ -94,6 +94,32 @@ bot.run()
 print(f'** Lucro obtido: R$ {bot.profit}')
 ```
 
+### Retração de Fibonacci
+Essa estratégia opera na reversão do movimento quando o preço atinge o nível desejado. Isso significa que se o preço está caindo e atinge o nível 61.8%, uma compra será efetuada.
+```Python
+from trading.bot import TradingBot
+from trading.setup import TradingSetup
+from trading.exchanges.iqoption import IQOptionExchange
+from trading.strategies.fibonacci import Level, FibonacciStrategy
+
+setup    = TradingSetup(asset='EURUSD', timeframe=1, money_amount=1.0, stoploss=2.0, stopgain=2.0)
+
+strategy = FibonacciStrategy(
+    candles_amount=100,
+    levels=[
+        Level(level='23.6'),
+        Level(level='38.2'),
+        Level(level='50'),
+        Level(level='61.8')
+    ]
+)
+exchange = IQOptionExchange(email, password)
+bot      = TradingBot(exchange, setup, strategy)
+
+exchange.connect()
+bot.run()
+```
+
 ## Criando sua própria estratégia
 Para criar uma nova estratégia, crie uma classe que herda da classe TradingStrategy e implemente o método evaluate().
 

@@ -23,7 +23,7 @@ class FibonacciStrategy(TradingStrategy):
     def __init__(self, levels: list[Level], candles_amount: int = 100) -> None:
         super().__init__(candles_amount)
         self.levels = levels
-        print(f'** Levels: {self.levels}')
+        print(f'** Levels: {self.levels}\n')
 
     def price_reached_level(self, price: float, target_price: float) -> bool:
         return  0.999985 < (price / target_price) < 1.000015
