@@ -29,12 +29,12 @@ class Candle:
     def color(self) -> Color:
         if(self.close > self.open): return Color.GREEN
         if(self.close < self.open): return Color.RED
-        return Color.GRAY
+        return Color.GREY
 
     def __repr__(self) -> str:
         start = self.start_time.strftime('%H:%M')
         end   = self.end_time.strftime('%H:%M')
-        return f'Candle(color={self.color()}, start={start}, end={end})'
+        return f'Candle(color={self.color.value}, start={start}, end={end})'
     
     @property
     def to_dict(self):
