@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tradingbot",
-    version="1.2.7",
+    version="1.2.8",
     packages=find_packages(),
     description="A scalable bot where you can create custom trading strategies",
     long_description="A scalable bot where you can create custom trading strategies",

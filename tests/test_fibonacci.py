@@ -3,7 +3,7 @@ from trading.exceptions import StopTradingBot
 from trading.strategies.fibonacci import FibonacciStrategy, Level
 from trading.util import Action, Candle
 
-fibonacci_levels = ['23.6', '38.2', '50', '61.8', '100']
+fibonacci_levels = ['23.6', '38.2', '50', '61.8']
 
 candles = [
     Candle(open=0.909094, close=0.909093, high=0.909128, low=0.909081, volume=0, start_time=None, end_time=None),
@@ -30,7 +30,7 @@ def test_should_calculate_price_for_all_fibonacci_levels():
     max_price = 0.910626
     min_price = 0.909234
     
-    expected_prices  = [0.910297, 0.910094, 0.90993, 0.909766, 0.909234]
+    expected_prices  = [0.910297, 0.910094, 0.90993, 0.909766]
     fibonacci_prices = [
         Level(level=level).get_fibonacci_price(max_price, min_price) 
         for level in fibonacci_levels

@@ -6,6 +6,11 @@ class Action(Enum):
     SELL = auto()
     HOLD = auto()
 
+class Color(Enum):
+    GREEN = 'green'
+    RED   = 'red'
+    GREY  = 'grey'
+
 
 class Candle:
     def __init__(self, 
@@ -20,10 +25,11 @@ class Candle:
         self.start_time = start_time
         self.end_time = end_time
     
-    def color(self)->str:
-        if(self.close > self.open): return 'GREEN'
-        if(self.close < self.open): return 'RED'
-        return 'GRAY'
+    @property
+    def color(self) -> Color:
+        if(self.close > self.open): return Color.GREEN
+        if(self.close < self.open): return Color.RED
+        return Color.GRAY
 
     def __repr__(self) -> str:
         start = self.start_time.strftime('%H:%M')
