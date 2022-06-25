@@ -5,6 +5,7 @@ from trading.util import Action, Candle
 
 candles = [
     Candle(
+        id=0,
         open=0.988500, 
         close=0.988600, 
         high=0.988615, 

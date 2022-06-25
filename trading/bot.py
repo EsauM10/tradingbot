@@ -51,10 +51,13 @@ class TradingBot:
 
         if(action == Action.HOLD):
             raise HoldAction()
-        if(action == Action.BUY):
-            return self.exchange.buy(asset, expiration, amount)
-        if(action == Action.SELL):
-            return self.exchange.sell(asset, expiration, amount)
+        
+        transaction = self.exchange.buy(asset, expiration, amount, action)
+        print(f'** [{asset}]: Operacao iniciada   -> {action.name}')
+        self.exchange.wait_transaction(transaction)
+        print(f'** [{asset}]: Operacao finalizada -> {transaction}\n')
+        return transaction
+
 
     def update_profit(self, transaction: Transaction):
         self._profit += transaction.profit
@@ -87,8 +90,8 @@ class TradingBot:
         while self._running:
             try:  
                 candles     = self.exchange.get_candles(asset, timeframe, candles_amount, timestamp=time.time())
-                result      = self.strategy.evaluate(candles=candles)
-                transaction = self.perform_transaction(action=result)
+                action      = self.strategy.evaluate(candles=candles)
+                transaction = self.perform_transaction(action=action)
                 
                 self.update_profit(transaction)
                 self.verify_if_should_stop()

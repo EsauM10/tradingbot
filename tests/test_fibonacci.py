@@ -6,22 +6,22 @@ from trading.util import Action, Candle
 fibonacci_levels = ['23.6', '38.2', '50', '61.8']
 
 candles = [
-    Candle(open=0.909094, close=0.909093, high=0.909128, low=0.909081, volume=0, start_time=None, end_time=None),
-    Candle(open=0.909097, close=0.909035, high=0.9091,   low=0.909025, volume=0, start_time=None, end_time=None),
-    Candle(open=0.909033, close=0.908978, high=0.909085, low=0.908978, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908976, close=0.909015, high=0.909027, low=0.90897,  volume=0, start_time=None, end_time=None),
-    Candle(open=0.909018, close=0.908818, high=0.909037, low=0.908818, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908815, close=0.908886, high=0.908892, low=0.908773, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908885, close=0.90874,  high=0.908886, low=0.90874,  volume=0, start_time=None, end_time=None),
-    Candle(open=0.908738, close=0.908786, high=0.908804, low=0.908726, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908797, close=0.908821, high=0.908884, low=0.908786, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908822, close=0.908712, high=0.908834, low=0.908712, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908738, close=0.908768, high=0.908785, low=0.908714, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908771, close=0.908632, high=0.908773, low=0.908625, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908632, close=0.908641, high=0.908663, low=0.90861,  volume=0, start_time=None, end_time=None),
-    Candle(open=0.908616, close=0.908648, high=0.908668, low=0.908589, volume=0, start_time=None, end_time=None),
-    Candle(open=0.90865,  close=0.90871,  high=0.908718, low=0.908633, volume=0, start_time=None, end_time=None),
-    Candle(open=0.908712, close=0.908742, high=0.908753, low=0.908683, volume=0, start_time=None, end_time=None),
+    Candle(id=0, open=0.909094, close=0.909093, high=0.909128, low=0.909081, volume=0, start_time=None, end_time=None),
+    Candle(id=1, open=0.909097, close=0.909035, high=0.9091,   low=0.909025, volume=0, start_time=None, end_time=None),
+    Candle(id=2, open=0.909033, close=0.908978, high=0.909085, low=0.908978, volume=0, start_time=None, end_time=None),
+    Candle(id=3, open=0.908976, close=0.909015, high=0.909027, low=0.90897,  volume=0, start_time=None, end_time=None),
+    Candle(id=4, open=0.909018, close=0.908818, high=0.909037, low=0.908818, volume=0, start_time=None, end_time=None),
+    Candle(id=5, open=0.908815, close=0.908886, high=0.908892, low=0.908773, volume=0, start_time=None, end_time=None),
+    Candle(id=6, open=0.908885, close=0.90874,  high=0.908886, low=0.90874,  volume=0, start_time=None, end_time=None),
+    Candle(id=7, open=0.908738, close=0.908786, high=0.908804, low=0.908726, volume=0, start_time=None, end_time=None),
+    Candle(id=8, open=0.908797, close=0.908821, high=0.908884, low=0.908786, volume=0, start_time=None, end_time=None),
+    Candle(id=9, open=0.908822, close=0.908712, high=0.908834, low=0.908712, volume=0, start_time=None, end_time=None),
+    Candle(id=10, open=0.908738, close=0.908768, high=0.908785, low=0.908714, volume=0, start_time=None, end_time=None),
+    Candle(id=11, open=0.908771, close=0.908632, high=0.908773, low=0.908625, volume=0, start_time=None, end_time=None),
+    Candle(id=12, open=0.908632, close=0.908641, high=0.908663, low=0.90861,  volume=0, start_time=None, end_time=None),
+    Candle(id=13, open=0.908616, close=0.908648, high=0.908668, low=0.908589, volume=0, start_time=None, end_time=None),
+    Candle(id=14, open=0.90865,  close=0.90871,  high=0.908718, low=0.908633, volume=0, start_time=None, end_time=None),
+    Candle(id=15, open=0.908712, close=0.908742, high=0.908753, low=0.908683, volume=0, start_time=None, end_time=None),
 ]
 
 
@@ -58,6 +58,7 @@ def test_should_return_false_if_the_price_not_reached_the_level():
 
 def test_should_buy_when_the_price_falls():
     red_candle = Candle(
+        id=0,
         open=0.988500, 
         close=0.988400,
         high=0.988615, 
@@ -73,6 +74,7 @@ def test_should_buy_when_the_price_falls():
 
 def test_should_sell_when_the_price_grows():
     green_candle = Candle(
+        id=0,
         open=0.988500, 
         close=0.988600,
         high=0.988615, 
@@ -106,10 +108,10 @@ def test_should_hold_if_the_price_not_reached_any_level():
 
 def test_should_purchase_in_all_fibonacci_level():
     candles_to_append = [
-        Candle(open=0.909060, close=0.908990, high=0.909070, low=0.909001, volume=0, start_time=None, end_time=None),
-        Candle(open=0.908858, close=0.908930, high=0.908940, low=0.908850, volume=0, start_time=None, end_time=None),
-        Candle(open=0.908808, close=0.908858, high=0.908870, low=0.908790, volume=0, start_time=None, end_time=None),
-        Candle(open=0.908830, close=0.908808, high=0.908845, low=0.908795, volume=0, start_time=None, end_time=None),
+        Candle(id=0, open=0.909060, close=0.908990, high=0.909070, low=0.909001, volume=0, start_time=None, end_time=None),
+        Candle(id=1, open=0.908858, close=0.908930, high=0.908940, low=0.908850, volume=0, start_time=None, end_time=None),
+        Candle(id=2, open=0.908808, close=0.908858, high=0.908870, low=0.908790, volume=0, start_time=None, end_time=None),
+        Candle(id=3, open=0.908830, close=0.908808, high=0.908845, low=0.908795, volume=0, start_time=None, end_time=None),
     ]
 
     levels = [

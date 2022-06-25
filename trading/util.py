@@ -14,9 +14,10 @@ class Color(Enum):
 
 class Candle:
     def __init__(self, 
-        open:float, close: float, high: float, low: float, 
+        id: int, open:float, close: float, high: float, low: float, 
         volume:int, start_time:datetime, end_time: datetime
     ) -> None:
+        self.id     = id
         self.open   = open
         self.close  = close
         self.high   = high
@@ -47,13 +48,25 @@ class Candle:
             'start_time': self.start_time,
             'end_time': self.end_time
         }
+    
+    def __eq__(self, other: object) -> bool:
+        if(not isinstance(other, Candle)): return False
+        return other.id == self.id
 
 
 class Transaction:
-    def __init__(self, result:str, profit:float) -> None:
-        self.result = result
-        self.profit = profit
-        self.action = None
+    def __init__(self, id: int, asset: str, expiration_time: int, money_amount: float, action: Action) -> None:
+        self.id              = id
+        self.asset           = asset
+        self.expiration_time = expiration_time
+        self.money_amount    = money_amount
+        self.action          = action
+        self.status          = 'uncompleted'
+        self.profit          = 0.0
+    
+    @property
+    def is_completed(self) -> bool:
+        return self.status != 'uncompleted'
     
     def __str__(self) -> str:
-        return f'<result={self.result}, profit={self.profit}>'
+        return f'<status={self.status}, profit={self.profit}>'

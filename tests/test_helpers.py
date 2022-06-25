@@ -8,12 +8,12 @@ start_time = datetime.now() - timedelta(minutes=1)
 end_time   = datetime.now()
 
 candles = [
-    Candle(open=0.988586, close=0.988608, high=0.988615, low=0.988547, volume=15, start_time=start_time, end_time=end_time),
-    Candle(open=0.988611, close=0.988563, high=0.988624, low=0.988523, volume=12, start_time=None, end_time=None),
-    Candle(open=0.988562, close=0.988651, high=0.988664, low=0.988557, volume=18, start_time=None, end_time=None),
-    Candle(open=0.988651, close=0.988675, high=0.988701, low=0.988571, volume=16, start_time=None, end_time=None),
-    Candle(open=0.988658, close=0.988725, high=0.988756, low=0.988658, volume=14, start_time=None, end_time=None),
-    Candle(open=0.988721, close=0.988701, high=0.988768, low=0.988685, volume=19, start_time=None, end_time=None),
+    Candle(id=0, open=0.988586, close=0.988608, high=0.988615, low=0.988547, volume=15, start_time=start_time, end_time=end_time),
+    Candle(id=1, open=0.988611, close=0.988563, high=0.988624, low=0.988523, volume=12, start_time=None, end_time=None),
+    Candle(id=2, open=0.988562, close=0.988651, high=0.988664, low=0.988557, volume=18, start_time=None, end_time=None),
+    Candle(id=3, open=0.988651, close=0.988675, high=0.988701, low=0.988571, volume=16, start_time=None, end_time=None),
+    Candle(id=4, open=0.988658, close=0.988725, high=0.988756, low=0.988658, volume=14, start_time=None, end_time=None),
+    Candle(id=5, open=0.988721, close=0.988701, high=0.988768, low=0.988685, volume=19, start_time=None, end_time=None),
 ]
 
 

@@ -18,15 +18,25 @@ class IQOptionExchange(Exchange):
     def change_account(self, mode: AccountModes):
         self.api.change_balance(mode)
 
-    def connect(self):
-        (status, reason) = self.api.connect()
+    def connect(self) -> bool:
+        status, reason = self.api.connect()
         if(not status): raise Exception(f'{reason}')
+        return True
 
-    def buy(self, asset: str, expiration: int, amount: float) -> Transaction:
-        return self.__perform_operation(asset, expiration, amount, 'call')
+    def buy(self, asset:str, expiration:int, amount:float, action: Action) -> Transaction:
+        direction  = 'call' if(action == Action.BUY) else 'put'
+        status, id = self.api.buy(amount, asset, direction, expiration)
+
+        if(not status): 
+            raise TransactionCanceled('** Ativo/Timeframe nao disponivel\n')
+        
+        return Transaction(
+            id=id,
+            asset=asset, 
+            expiration_time=expiration, 
+            money_amount=amount, 
+            action=action)
     
-    def sell(self, asset: str, expiration: int, amount: float) -> Transaction:
-        return self.__perform_operation(asset, expiration, amount, 'put')
 
     def get_candles(self, asset:str, timeframe:int, candles_amount:int, timestamp:float) -> list[Candle]:
         if(candles_amount <= 0): return []
@@ -36,9 +46,16 @@ class IQOptionExchange(Exchange):
         data = self.api.get_candles(asset, timeframe*60, candles_amount, timestamp)
         return [self.__format_candle(candle) for candle in data]
 
+
+    def wait_transaction(self, transaction: Transaction):
+        result, profit = self.api.check_win_v4(transaction.id)
+        transaction.status = result
+        transaction.profit = round(float(profit), 2)
+
     
     def __format_candle(self, candle: dict) -> Candle:
         return Candle(
+            id     = candle['id'],
             open   = candle['open'],
             close  = candle['close'],
             high   = candle['max'],
@@ -47,21 +64,3 @@ class IQOptionExchange(Exchange):
             start_time = datetime.fromtimestamp(candle['from']),
             end_time   = datetime.fromtimestamp(candle['to'])
         ) 
-
-    def __perform_operation(self, asset: str, expiration: int, amount: float, direction: str) -> Transaction:
-        status, id = self.api.buy(amount, asset, direction, expiration)
-
-        if(not status): 
-            raise TransactionCanceled('** Ativo/Timeframe nao disponivel\n')
-        
-        print(f'** [{asset}]: Operacao iniciada   -> {direction.upper()}')
-        transaction = self.__wait_operation(operation_id=id)
-        transaction.action = Action.BUY if(direction=='call') else Action.SELL
-        print(f'** [{asset}]: Operacao finalizada -> {transaction}\n')
-        
-        return transaction
-
-    
-    def __wait_operation(self, operation_id: int) -> Transaction:
-        result, profit = self.api.check_win_v4(operation_id)
-        return Transaction(result, round(profit, 2))
