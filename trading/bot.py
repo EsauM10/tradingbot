@@ -54,7 +54,7 @@ class TradingBot:
         
         transaction = self.exchange.buy(asset, expiration, amount, action)
         print(f'** [{asset}]: Operacao iniciada   -> {action.name}')
-        self.exchange.wait_transaction(transaction)
+        self.exchange.wait(transaction)
         print(f'** [{asset}]: Operacao finalizada -> {transaction}\n')
         return transaction
 

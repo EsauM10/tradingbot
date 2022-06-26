@@ -47,10 +47,11 @@ class IQOptionExchange(Exchange):
         return [self.__format_candle(candle) for candle in data]
 
 
-    def wait_transaction(self, transaction: Transaction):
+    def wait(self, transaction: Transaction) -> Transaction:
         result, profit = self.api.check_win_v4(transaction.id)
         transaction.status = result
         transaction.profit = round(float(profit), 2)
+        return transaction
 
     
     def __format_candle(self, candle: dict) -> Candle:

@@ -85,7 +85,7 @@ def test_should_wait_until_the_transaction_status_is_completed(monkeypatch: Monk
     monkeypatch.setattr(exchange.api, 'check_win_v4', check_win)
 
     transaction = Transaction(id=0, asset='', expiration_time=0, money_amount=0, action=None)
-    exchange.wait_transaction(transaction)
+    exchange.wait(transaction)
     
     assert transaction.is_completed == True
     assert transaction.profit == 1.0

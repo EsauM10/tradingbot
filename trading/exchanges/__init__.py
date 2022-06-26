@@ -18,5 +18,5 @@ class Exchange(ABC):
         pass
 
     @abstractmethod
-    def wait_transaction(self, transaction: Transaction):
+    def wait(self, transaction: Transaction) -> Transaction:
         pass
